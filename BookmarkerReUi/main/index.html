@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="view" content="home">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Bookmarker</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container main">
+      <form>
+        <div class="form-group">
+          <label for="bookmark-file">Bookmark</label>
+          <div class="input-group">
+            <input type="text" id="bookmark-file" class="form-control" placeholder="Bookmark" required>
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id="btn-bookmark-file">Select</button>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="rule-file">Rule</label>
+          <div class="input-group">
+            <input type="text" id="rule-file" class="form-control" placeholder="Rule XML File" required>
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id="btn-rule-file">Select</button>
+            </span>
+          </div>
+        </div>
+        <div class="verticle-margin row">
+          <button type="submit" id="btn-classfiy" class="btn btn-default btn-primary col-xs-6 col-xs-offset-3">整理</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="footer">
+      <span>Bookmarker All Rights Reserved By <a href="https://github.com/soxfmr/bookmarker" target="_blank">Soxfmr</a></span>
+    </div>
+
+    <script src="assets/vendor/jquery/jquery-1.11.3.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      $(function() {
+        $('#btn-classfiy').on('click', function(e) {
+          e.preventDefault();
+        });
+      });
+    </script>
+  </body>
+</html>

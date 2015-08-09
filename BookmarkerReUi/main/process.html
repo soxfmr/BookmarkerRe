@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="view" content="process">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Bookmarker</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container main">
+      <div id="loader">
+        <div id="spinner"></div>
+      </div>
+      <div id="pin">
+        <span id="pin-text"></span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Bookmarker All Rights Reserved By <a href="https://github.com/soxfmr/bookmarker" target="_blank">Soxfmr</a></span>
+    </div>
+
+    <script src="assets/vendor/jquery/jquery-1.11.3.min.js"></script>
+    <script src="assets/vendor/raphael/raphael-min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      function show() {
+          alert('Done!');
+      }
+
+      function callback(status) {
+        switch (status) {
+          case 200:
+            $('#spinner').css({'border-color' : '#5cb85c', 'animation' : ''});
+            break;
+          case 500:
+            $('#spinner').css({'border-color' : '#d9534f', 'animation' : ''});
+            break;
+          default:break;
+        }
+
+        $('#pin-text').html( $('#pin-text').text() + '<a href="index.html">返回</a>' );
+      }
+    </script>
+  </body>
+</html>
