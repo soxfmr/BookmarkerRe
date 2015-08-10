@@ -64,3 +64,9 @@ Here is a sample file of the rules:
 
 ### 0x3 Bookmark File
 You can export the html format file from Chrome via the bookmark management tool.
+
+
+
+
+
+##Publish Under MIT License##
