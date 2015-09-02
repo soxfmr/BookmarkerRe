@@ -32,8 +32,8 @@ namespace BookmarkerRe
 
         public void init()
         {
-            webUI.addView(VIEW_HOME, APP_ROOT + "/index.html");
-            webUI.addView(VIEW_PROCESS, APP_ROOT + "/process.html");
+            webUI.addView(VIEW_HOME, APP_ROOT + "/index.html", "home");
+            webUI.addView(VIEW_PROCESS, APP_ROOT + "/process.html", "process");
             webUI.setCompletedListener(WEBUI_DocumentCompleted);
 
             webUI.LoadView(VIEW_HOME);
@@ -51,29 +51,7 @@ namespace BookmarkerRe
         {
             mDocument = webUI.GetDocument();
 
-            int index = 0;
-
-            String attr = null;
-
-            HtmlElementCollection elementList = mDocument.GetElementsByTagName("meta");
-            foreach(HtmlElement element in elementList)
-            {
-                if((attr = element.GetAttribute("name")) != null && attr == "view")
-                {
-                    switch(element.GetAttribute("content"))
-                    {
-                        case "home":
-                            index = VIEW_HOME;
-                            break;
-                        case "process":
-                            index = VIEW_PROCESS;
-                            break;
-                        default: break;
-                    }
-
-                    break;
-                }
-            }
+            int index = webUI.GetViewIndex();
 
             switch(index)
             {
@@ -94,8 +72,8 @@ namespace BookmarkerRe
                 case VIEW_PROCESS:
 
                     txtPinText = mDocument.GetElementById("pin-text");
-
                     HtmlElement btnExport = mDocument.GetElementById("btn-export");
+
                     btnExport.Click += new HtmlElementEventHandler(OnExportClick);
 
                     break;
@@ -165,15 +143,12 @@ namespace BookmarkerRe
         /// </summary>
         private void ProcessCallback(int status)
         {
-            if (mDocument != null)
+            // Invoke the function in UI thread
+            Invoke(new Action(delegate
             {
                 object[] funcParams = new object[] { status };
-                // Invoke the function in UI thread
-                this.Invoke(new Action(delegate
-                {
-                    mDocument.InvokeScript("callback", funcParams);
-                }));
-            }
+                webUI.InvokeNativeFunc("callback", funcParams);
+            }));
         }
 
         public void OnStart()

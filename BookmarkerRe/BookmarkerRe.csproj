@@ -87,6 +87,7 @@
     <Compile Include="BookmarkRule\SimpleRule.cs" />
     <Compile Include="BookmarkRule\UrlRule.cs" />
     <Compile Include="Common\ToolsUtil.cs" />
+    <Compile Include="View\ViewInfo.cs" />
     <Compile Include="View\WebUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
