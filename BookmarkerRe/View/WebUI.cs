@@ -27,12 +27,7 @@ namespace BookmarkerRe.View
             viewList.Add(index, new ViewInfo(html, tag));
         }
 
-        public void LoadView(int index)
-        {
-            LoadView(index, false);
-        }
-
-        public void LoadView(int index, bool sync)
+        public void LoadView(int index, bool sync = false)
         {
             ViewInfo vi = GetViewInfo(index);
             if (vi == null) return;

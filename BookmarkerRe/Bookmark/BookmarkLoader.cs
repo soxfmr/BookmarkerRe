@@ -44,10 +44,6 @@ namespace BookmarkerRe
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
             finally
             {
                 if(reader != null) reader.Close();
