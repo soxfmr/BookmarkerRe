@@ -10,7 +10,7 @@ namespace BookmarkerRe
     static class Bookmarker
     {
         /// <summary>
-        /// 应用程序的主入口点。
+        /// Application Enter point
         /// </summary>
         [STAThread]
         static void Main()

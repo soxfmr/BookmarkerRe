@@ -26,7 +26,7 @@ namespace BookmarkerRe
             ruleMatcher = new RuleMatcher();
         }
 
-        public void Execute(String bookmarkFile, String RuleFile, bool Async = true)
+        public void Execute(string bookmarkFile, string RuleFile, bool Async = true)
         {
             if(Async)
             {
@@ -44,7 +44,7 @@ namespace BookmarkerRe
             _Execute(bookmarkFile, RuleFile);
         }
 
-        private void _Execute(String bookmarkFile, String RuleFile)
+        private void _Execute(string bookmarkFile, string RuleFile)
         {
             mListener.OnStart();
 
