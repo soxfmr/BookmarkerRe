@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace BookmarkerRe
@@ -12,18 +12,16 @@ namespace BookmarkerRe
         public const int CALLBACK_SUCCESS = 200;
         public const int CALLBACK_FAILED = 500;
 
-        private static bool DOCUMENT_LOAD_COMPLETE = false;
-
         private string APP_ROOT = Environment.CurrentDirectory + "/main";
 
-        private HtmlDocument        mDocument;
-        private HtmlElement         edBookmarkFile;
-        private HtmlElement         edRuleFile;
+        private HtmlDocument mDocument;
+        private HtmlElement edBookmarkFile;
+        private HtmlElement edRuleFile;
 
-        private HtmlElement         txtPinText;
+        private HtmlElement txtPinText;
 
-        private BookmarkExecuter    bookmarkExecuter;
-        private ExecuteListener     executeListener;
+        private BookmarkExecuter bookmarkExecuter;
+        private ExecuteListener executeListener;
 
         public MainForm()
         {
@@ -34,113 +32,24 @@ namespace BookmarkerRe
 
         public void init()
         {
-            LoadView(VIEW_HOME);
-            // 初始化监听事件
+            webUI.addView(VIEW_HOME, APP_ROOT + "/index.html");
+            webUI.addView(VIEW_PROCESS, APP_ROOT + "/process.html");
+            webUI.setCompletedListener(WEBUI_DocumentCompleted);
+
+            webUI.LoadView(VIEW_HOME);
+            // Initial the listener
             executeListener = new ExecuteListener();
             executeListener.OnStart += OnStart;
             executeListener.OnFinish += OnFinish;
             executeListener.OnProcess += OnProcess;
             executeListener.OnError += OnError;
-            // 执行器
+            // Executer to delegate the real action
             bookmarkExecuter = new BookmarkExecuter(executeListener);
         }
 
-        /******************************* Main User Interface Operation ************************************/
-
-        /// <summary>
-        /// 载入视图
-        /// </summary>
-        /// <param name="index">视图索引</param>
-        /// <param name="wait">同步视图加载</param>
-        private void LoadView(int index, bool wait = false)
+        private void WEBUI_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            switch(index)
-            {
-                case VIEW_HOME:
-                    LoadView(APP_ROOT + "/index.html", wait);
-                    break;
-                case VIEW_PROCESS:
-                    LoadView(APP_ROOT + "/process.html", wait);
-                    break;
-                default: break;
-            }
-        }
-
-        /// <summary>
-        /// 载入视图
-        /// </summary>
-        /// <param name="fn">视图路径</param>
-        /// <param name="wait">同步视图加载</param>
-        private void LoadView(String fn, bool wait)
-        {
-            SetLoadStatus(false);
-
-            MainUserInterface.Navigate(fn);
-
-            // 等待页面加载完成
-            if(wait)
-            {
-                while(! GetLoadStatus())
-                {
-                    Thread.Sleep(200);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 在过程中显示信息
-        /// </summary>
-        /// <param name="message"></param>
-        private void ShowFeedback(String message)
-        {
-            // 处理过程信息
-            if (txtPinText != null)
-            {
-                txtPinText.InnerText = message;
-            }
-        }
-
-        /// <summary>
-        /// 设置视图加载状态
-        /// </summary>
-        /// <param name="finished"></param>
-        private void SetLoadStatus(bool finished)
-        {
-            // 置位加载状态
-            DOCUMENT_LOAD_COMPLETE = finished;
-        }
-
-        /// <summary>
-        /// 获取视图加载状态
-        /// </summary>
-        /// <returns></returns>
-        private bool GetLoadStatus()
-        {
-            return DOCUMENT_LOAD_COMPLETE;
-        }
-
-        /// <summary>
-        /// 停止过程视图
-        /// function callback(int status) { success : 200, error : 500 }
-        /// </summary>
-        private void ProcessCallback(int status)
-        {
-            if(mDocument != null)
-            {
-                object[] funcParams = new object[] { status };
-
-                this.Invoke(new Action(delegate
-                {
-                    mDocument.InvokeScript("callback", funcParams);
-                }));
-            }
-        }
-
-        /******************************* Main User Interface Operation ************************************/
-
-        private void MainUserInterface_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            mDocument = MainUserInterface.Document;
+            mDocument = webUI.GetDocument();
 
             int index = 0;
 
@@ -186,10 +95,13 @@ namespace BookmarkerRe
 
                     txtPinText = mDocument.GetElementById("pin-text");
 
+                    HtmlElement btnExport = mDocument.GetElementById("btn-export");
+                    btnExport.Click += new HtmlElementEventHandler(OnExportClick);
+
                     break;
             }
 
-            SetLoadStatus(true);
+            webUI.SetLoadStatus(true);
         }
 
         public void OnRuleFileClick(object sender, HtmlElementEventArgs e)
@@ -214,7 +126,7 @@ namespace BookmarkerRe
         {
             if (edRuleFile == null || edBookmarkFile == null)
             {
-                MainUserInterface.Refresh();
+                webUI.Reload();
                 return;
             }
 
@@ -230,24 +142,57 @@ namespace BookmarkerRe
             
         }
 
-        public void OnStart()
+        public void OnExportClick(object sender, HtmlElementEventArgs e)
         {
-            // 非异步加载视图
-            LoadView(VIEW_PROCESS, true);
-
-            ShowFeedback("载入环境...");
+            String fn = ToolsUtil.GetSaveFileDialog("Bookmark File(*.html)|*.html|All Files(*.*)|*.*");
+            if (fn != null)
+            {
+                bookmarkExecuter.Export(fn);
+            }
         }
 
-        public void OnFinish()
+        private void ShowFeedback(String message)
         {
-            ShowFeedback("整理完成！");
+            if (txtPinText != null)
+            {
+                txtPinText.InnerText = message;
+            }
+        }
 
-            ProcessCallback(CALLBACK_SUCCESS);
+        /// <summary>
+        /// Push the message on the process page when the action has done.
+        /// function callback(int status) { success : 200, error : 500 }
+        /// </summary>
+        private void ProcessCallback(int status)
+        {
+            if (mDocument != null)
+            {
+                object[] funcParams = new object[] { status };
+                // Invoke the function in UI thread
+                this.Invoke(new Action(delegate
+                {
+                    mDocument.InvokeScript("callback", funcParams);
+                }));
+            }
+        }
+
+        public void OnStart()
+        {
+            webUI.LoadView(VIEW_PROCESS, true);
+
+            ShowFeedback("Initialize the environment...");
         }
 
         public void OnProcess(String message)
         {
             ShowFeedback(message);
+        }
+
+        public void OnFinish()
+        {
+            ShowFeedback("All Done！");
+
+            ProcessCallback(CALLBACK_SUCCESS);
         }
 
         public void OnError(String message)

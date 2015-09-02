@@ -58,42 +58,36 @@ namespace BookmarkerRe
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException("The rule file dosen't exists.");
+            // Catching the exception in outside
+            XmlDocument doc = new XmlDocument();
+            doc.Load(path);
 
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(path);
-
-                ParseCatalogs(doc);
-            }catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            ParseCatalogs(doc);
         }
 
         /// <summary>
-        /// 遍历所有分类节点
+        /// Resolve all of node
         /// </summary>
-        /// <param name="doc">XML 文档对象</param>
+        /// <param name="doc">XML Doucment Object</param>
         private void ParseCatalogs(XmlDocument doc)
         {
-            // 载入根节点
+            // Load the root node
             XmlNode rootNode = doc.SelectSingleNode("catalogs");
             
             if (rootNode.HasChildNodes)
             {
-                // 新的分类信息列表
+                // Creating a new entity for this node
                 catalogList = new List<CatalogEntity>();
-                // 子节点信息
+                // An instance to store the child node temporary
                 XmlNode catalogNode = null;
-                // 遍历节点
+                // Resolve all of child node
                 for(int i = 0, count = rootNode.ChildNodes.Count; i < count; i++)
                 {
                     catalogNode = rootNode.ChildNodes[i];
-                    // 是否正常子节点
+                    // Is that a normal node
                     if(catalogNode.Name == "catalog" && catalogNode.HasChildNodes)
                     {
-                        // 读取分类节点下的所有信息
+                        // Resolve all of information of child node
                         ParseSingleCatalog(catalogNode);
                     }
                 }
@@ -101,25 +95,25 @@ namespace BookmarkerRe
         }
 
         /// <summary>
-        /// 递归解析分类下所有信息并添加到全局分类树
+        /// Resolve all of information of child node and append to the global tree of catalogs
         /// </summary>
-        /// <param name="catalogNode">分类节点</param>
-        /// <param name="parent">父节点索引</param>
+        /// <param name="catalogNode">parent node</param>
+        /// <param name="parent">the index of parent node in global catalogs tree</param>
         private void ParseSingleCatalog(XmlNode catalogNode, int parent = -1)
         {
             XmlNode node = null;
             CatalogEntity entity = null;
 
-            // 新的分类
+            // Creating a new catalog
             BookmarkCatalog bookmarkCatalog = new BookmarkCatalog(((XmlElement)catalogNode).GetAttribute("name"));
-            // 分类树分支
+            // A new catalog entity
             entity = new CatalogEntity();
             entity.Parent = parent;
             entity.Catalog = bookmarkCatalog;
-            // 添加到全局分支
+            // Append to the global tree
             catalogList.Add(entity);
 
-            // 遍历子节点，包括子目录和规则
+            // Resolve all of child node and rules
             for (int i = 0, count = catalogNode.ChildNodes.Count; i < count; i++)
             {
                 node = catalogNode.ChildNodes[i];
@@ -143,16 +137,16 @@ namespace BookmarkerRe
         }
 
         /// <summary>
-        /// 遍历规则列表
+        /// Resolve all of rule
         /// </summary>
-        /// <param name="ruleNode">Rule 根节点</param>
+        /// <param name="ruleNode">Parent Rule</param>
         /// <returns></returns>
         private List<Rule> ParseRules(XmlNode ruleNode)
         {
             List<Rule> ruleList = new List<Rule>();
 
             XmlNode node = null;
-            // 遍历规则节点
+
             for (int i = 0, count = ruleNode.ChildNodes.Count; i < count; i++)
             {
                 node = ruleNode.ChildNodes[i];
@@ -182,7 +176,7 @@ namespace BookmarkerRe
         private Rule ParseSingleRule(XmlNode item)
         {
             Rule rule = null;
-            // 根据规则父节点指定对应类型规则
+            // Creating a new object for the rule with different type
             switch (item.ParentNode.Name)
             {
                 case "url":

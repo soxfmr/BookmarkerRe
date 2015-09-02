@@ -66,7 +66,7 @@ namespace BookmarkerRe
 
             for (int i = bookmarkList.Count - 1; i >= 0; i--)
             {
-                if(Regex.IsMatch(bookmarkList[i].Url, rule.Pattern, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(bookmarkList[i].Url, Regex.Escape(rule.Pattern), RegexOptions.IgnoreCase))
                 {
                     matchList.Add(bookmarkList[i]);
 
@@ -83,7 +83,7 @@ namespace BookmarkerRe
 
             for (int i = bookmarkList.Count - 1; i >= 0; i--)
             {
-                if (Regex.IsMatch(bookmarkList[i].Url, rule.Pattern, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(bookmarkList[i].Title, Regex.Escape(rule.Pattern), RegexOptions.IgnoreCase))
                 {
                     matchList.Add(bookmarkList[i]);
 
@@ -100,8 +100,8 @@ namespace BookmarkerRe
 
             for (int i = bookmarkList.Count - 1; i >= 0; i--)
             {
-                if (Regex.IsMatch(bookmarkList[i].Url, rule.Pattern, RegexOptions.IgnoreCase) ||
-                    Regex.IsMatch(bookmarkList[i].Title, rule.Pattern, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(bookmarkList[i].Url, Regex.Escape(rule.Pattern), RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(bookmarkList[i].Title, Regex.Escape(rule.Pattern), RegexOptions.IgnoreCase))
                 {
                     matchList.Add(bookmarkList[i]);
 

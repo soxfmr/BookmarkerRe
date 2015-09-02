@@ -9,9 +9,9 @@ namespace BookmarkerRe
         private const string BOOKMARK_TAG_URL = "HREF";
         private const string BOOKMARK_TAG_ICON = "ICON";
         private const string BOOKMARK_TAG_ADD_DATE = "ADD_DATE";
-        // 净化内容
+        // The redundancy content that will be remove
         private const string BOOKMARK_PURGES = "<DT>";
-        // 待清除关键词分割符
+        // The separator of echo redundancy words
         private const char BOOKMARK_PURGE_SEPARATOR = '|';
 
         public string Url;

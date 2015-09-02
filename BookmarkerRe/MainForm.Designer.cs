@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.MainUserInterface = new System.Windows.Forms.WebBrowser();
+            this.webUI = new BookmarkerRe.View.WebUI();
             this.SuspendLayout();
             // 
-            // MainUserInterface
+            // webUI
             // 
-            this.MainUserInterface.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainUserInterface.Location = new System.Drawing.Point(0, 0);
-            this.MainUserInterface.MinimumSize = new System.Drawing.Size(20, 20);
-            this.MainUserInterface.Name = "MainUserInterface";
-            this.MainUserInterface.Size = new System.Drawing.Size(651, 405);
-            this.MainUserInterface.TabIndex = 0;
-            this.MainUserInterface.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.MainUserInterface_DocumentCompleted);
+            this.webUI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.webUI.Location = new System.Drawing.Point(-1, 0);
+            this.webUI.Name = "webUI";
+            this.webUI.Size = new System.Drawing.Size(652, 406);
+            this.webUI.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(651, 405);
-            this.Controls.Add(this.MainUserInterface);
+            this.Controls.Add(this.webUI);
             this.Name = "MainForm";
             this.Text = "Bookmarker - Chrome 书签自动整理";
             this.ResumeLayout(false);
@@ -55,6 +55,6 @@
 
         #endregion
 
-        private System.Windows.Forms.WebBrowser MainUserInterface;
+        private View.WebUI webUI;
     }
 }

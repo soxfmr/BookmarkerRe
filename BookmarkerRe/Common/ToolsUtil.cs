@@ -18,5 +18,20 @@ namespace BookmarkerRe
 
             return fn;
         }
+
+        public static string GetSaveFileDialog(string fileFilter = "")
+        {
+            string fn = null;
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = fileFilter;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                fn = dialog.FileName;
+            }
+
+            return fn;
+        }
     }
 }

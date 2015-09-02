@@ -29,24 +29,28 @@
       <div id="pin">
         <span id="pin-text"></span>
       </div>
+      <div id="ly-export">
+        <button class="btn btn-default btn-primary" id="btn-export">Export Bookmark File</button>
+      </div>
     </div>
 
     <div class="footer">
-      <span>Bookmarker All Rights Reserved By <a href="https://github.com/soxfmr/bookmarker" target="_blank">Soxfmr</a></span>
+      <span>Bookmarker All Rights Reserved By <a href="https://github.com/soxfmr/BookmarkerRe" target="_blank">Soxfmr</a></span>
     </div>
 
     <script src="assets/vendor/jquery/jquery-1.11.3.min.js"></script>
-    <script src="assets/vendor/raphael/raphael-min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script>
-      function show() {
-          alert('Done!');
-      }
+      $(function() {
+        $('#ly-export').hide();
+      })
 
       function callback(status) {
         switch (status) {
           case 200:
             $('#spinner').css({'border-color' : '#5cb85c', 'animation' : ''});
+
+            $('#ly-export').show();
             break;
           case 500:
             $('#spinner').css({'border-color' : '#d9534f', 'animation' : ''});
@@ -54,7 +58,7 @@
           default:break;
         }
 
-        $('#pin-text').html( $('#pin-text').text() + '<a href="index.html">返回</a>' );
+        $('#pin-text').html( $('#pin-text').text() + '<a href="index.html">Back</a>' );
       }
     </script>
   </body>

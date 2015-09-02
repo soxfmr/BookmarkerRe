@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.IO;
 
 namespace BookmarkerRe
 {
@@ -52,10 +53,10 @@ namespace BookmarkerRe
                 bookmarkLoader.Load(bookmarkFile);
                 catalogLoader.LoadFromXML(RuleFile);
 
-                mListener.OnProcess("正在载入书签文件...");
+                mListener.OnProcess("Loading bookmark file...");
                 List<BookmarkInfo> bookmarkList = bookmarkLoader.GetBookmarkList();
 
-                mListener.OnProcess("正在载入规则文件...");
+                mListener.OnProcess("Loading rule file...");
                 List<CatalogEntity> catalogList = catalogLoader.GetCatalogList();
 
                 if (bookmarkList == null || bookmarkLoader.isEmpty())
@@ -64,7 +65,7 @@ namespace BookmarkerRe
                 if (catalogList == null || catalogLoader.isEmpty())
                     throw new Exception("The content of the rule file is empty.");
 
-                mListener.OnProcess("正在整理书签...");
+                mListener.OnProcess("Processing...");
                 for (int i = 0, count = catalogList.Count; i < count; i++)
                 {
                     catalogList[i].BookmarkList = ruleMatcher.Match(bookmarkList,
@@ -84,6 +85,33 @@ namespace BookmarkerRe
         public List<CatalogEntity> GetResult()
         {
             return mResult;
+        }
+
+        public void Export(string fileName)
+        {
+            BookmarkFormat bookmarkFormat = new BookmarkFormat( mResult, new ChromeBookmarkWrapper() );
+            string content = bookmarkFormat.Format();
+
+            Thread thread = new Thread(new ThreadStart(delegate
+            {
+                StreamWriter writer = null;
+                try
+                {
+                    writer = new StreamWriter(fileName);
+                    writer.Write(content);
+                }
+                catch (IOException ex)
+                {
+                    Console.Write(ex.Message);
+                }
+                finally
+                {
+                    writer.Close();
+                }
+            }));
+
+            thread.IsBackground = true;
+            thread.Start();
         }
     }
 }
