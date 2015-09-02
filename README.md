@@ -2,11 +2,11 @@
 
 ### 0x0 What's BookrmarkerRe
 
-**BookmarkerRe** are the set of libraries that aim to classify the Chrome bookmarks automatically.
+**BookmarkerRe** is a set of libraries with an achieving tool that aim to classify the Chrome bookmarks automatically.
 
 ### 0x1 How it works
 
-The structure of **BookmarkerRe** as show the figure below:
+The structure of **BookmarkerRe** show as the figure below:
 
 ![](http://i1.tietuku.com/0c9bea3fa87a70a6.png?raw=true)
 
@@ -14,20 +14,20 @@ The structure of **BookmarkerRe** as show the figure below:
 * Visual Studio Community 2015
 * .Net Framework 4.0
 
-This repository has contain the libraries and the user interface with the Bootstrap framework. You can build it up from the sources. Notice that the user interface files should be located in MAIN directory which is under the base directory of the application.
+This repository has contain the libraries and the user interface with Bootstrap framework. You can build it up from the sources. Notice that the user interface files should be located in MAIN directory which is under the base directory of the application.
 
 ### 0x3 Rule File
-The rule file is a extreme important role in BookmarkerRe. For that way, a rule file was format by XML. There are the full of semantic format of the rule file.
+The rule file is a extreme important role in BookmarkerRe. Rule file is XML-formatted. There are the full of semantic formating of the rule file.
 
 * **catalogs** must be the root element in rule file
 * **catalog** name will be a directory name of a series of bookmarks
-* The catalog can contain the sub directory
+* The catalog can include the sub directory
 * There are three types of rule which can be used in the list : **url**, **simple** and **common**
-* The **url** of type will be match the URL of the bookmark only
-* The **simple** of type will be match the title of the bookmark only
+* The **url** of type will be only match the URL of the bookmark
+* The **simple** of type will be only match the title of the bookmark
 * The **common** of type will be match both of URL and title of the bookmark
 
-Here is a sample file of the rules:
+Here is an example of rule file:
 ```
 <?xml version="1.0" encoding="utf-8" ?>
 <catalogs>
@@ -40,10 +40,10 @@ Here is a sample file of the rules:
 				<item>XDA</item>
 			</rule>
 		</catalog>
-		<catalog name="iPhone">
+		<catalog name="Apple">
 			<rule>
 				<simple>
-					<item>App</item>
+					<item>iPhone</item>
 					<item>iOS</item>
 				</simple>
 			</rule>
