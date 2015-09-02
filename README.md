@@ -1,4 +1,4 @@
-# BookmarkerRe
+# BookmarkerRe [![Build Status](https://travis-ci.org/soxfmr/BookmarkerRe.svg)](https://travis-ci.org/soxfmr/BookmarkerRe)
 
 ### 0x0 What's BookrmarkerRe
 
